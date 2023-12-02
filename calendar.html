@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<br lang='en'>
+  <head>
+    <meta charset='utf-8' />
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js'></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", getEvents);
+        
+
+// // Empty array to store events
+// var events = [];
+
+// // Function to add events to the array
+// function addEvent(id, event, dateEventStart,dateEventEnd) {
+//   var event = { id: id, title: event,
+//         start: dateEventStart,
+//         end:dateEventEnd,};
+//   events.push(event);
+// }
+
+    //הוספת אירוע
+    function addEvents() {
+
+      let event = document.getElementById("event").value;
+      let dateEventStart = document.getElementById("dateEventStart").value;
+      let dateEventEnd = document.getElementById("dateEventEnd").value;
+
+      axios.post("https://localhost:7051/api/Events", {
+        title: event,
+        start: dateEventStart,
+        end:dateEventEnd,
+    }).then((res) => {
+      getEvents();
+      document.getElementById("addEvent").innerHTML += JSON.stringify(res.data)
+
+  
+    });
+    }
+  
+
+
+  // קבלת כל אירועים
+  function getEvents() {
+        axios.get("https://localhost:7051/api/Events").then((res) => {
+          var calendarEl = document.getElementById("calendar");
+          var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: "dayGridMonth",
+            events: res.data,
+          });
+          calendar.render();
+          
+        });
+      }
+//       // Get the select element
+// var selectElement = document.getElementById("mySelect");
+
+// // Loop through the events array and create option elements
+// for (var i = 0; i < events.length; i++) {
+//   var option = document.createElement("option");
+//   option.value = events[i].id;
+//   option.text = events[i].title;
+//   option.date=events[i].start;
+//   option.date=events[i].end;
+//   selectElement.appendChild(option);
+// }
+// console.log(events);
+      
+//     //עדכון אירוע
+//   function updateEvevnt(){
+//   let id=1;
+//   let eventUp = document.getElementById("update-title").value;
+//       let dateEventStartUp = document.getElementById("update-start").value;
+//       let dateEventEndUp = document.getElementById("update-end").value;
+//   axios.put(`https://localhost:7051/api/Events/${Id}`,{
+//     title: eventUp,
+//     start: dateEventStartUp,
+//     end: dateEventEndUp,
+//   }).then((res) => {
+//     document.getElementById("addEvent").innerHTML = "האירוע עודכן בהצלחה"
+   
+//   });
+//  }
+  
+//      // מחיקת אירוע
+//   function deleteEvent(){
+//     let id=1;
+//     axios.delete(`https://localhost:7051/api/Events/${Id}`).then((res) => {
+//       document.getElementById("events").innerHTML ="האירוע נמחק בהצלחה";
+//     })
+//   };
+
+ 
+
+    
+    
+  </script>
+  
+  </head>
+
+   <br>
+  <h1>Event Manager</h1>
+    
+   <h2>Add Event</h2>
+   <div>
+   <label>Event Name:</label>
+   <input type="text" name="task" placeholder="Enter Event" required id="event"><br>
+   <label>Date Start:</label>
+
+   <input type="date" name="date" required id="dateEventStart">
+   <label>Date End:</label>
+   <input type="date" name="date" required id="dateEventEnd"><br>
+   <button onclick="addEvents()"> Add Event</button>
+   </div>
+  
+  <div id="addEvent"></div>
+  <!-- <h2>Update Event</h2>
+  <div>
+    <select id="mySelect">רשימת אירועים</select>
+  <label>Event Name:</label>
+  <input type="text" id="update-title" placeholder="Event Title">
+</div>
+  <label>Date Start:</label>
+
+  <input type="date" id="update-start" placeholder="Dete Start">
+  <label>Date End:</label>
+  <input type="date" id="update-end" placeholder="Dete End">
+  <button onclick="updateEvevnt(id)"> Update Event</button>
+  </div>
+  
+  <h2>Delete Event</h2>
+  <button onclick="deleteEvent(id)"> Delete Event</button>
+  <div id="events"></div>
+
+
+   -->
+  
+
+  <div id='calendar'></div>
+ 
+</body>
+
+</html>
